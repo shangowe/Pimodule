@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .views import PMI
 from .models import Module
-from .controller import HVACcontroller, BTScontroller
+from .controller import HVACcontroller, BTScontroller, ModuleController
 # Create your tests here.
 
 class TestPMI(TestCase):
@@ -68,6 +68,16 @@ class TestBTScontroler(TestCase):
         self.bts.update_pin_db(3)
         self.bts.on()
         self.bts.off()
+
+class TestModuleController(TestCase):
+    """
+    Test the ModuleController implementation
+    """
+    def setUp(self):
+        mod = Module(name='MOD5',nms_server='192.168.10.10')
+        mod.save()
+        self.modctl = ModuleController()
+
 
 
 

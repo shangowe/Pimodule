@@ -1,4 +1,5 @@
 from .models import Module
+from .httpsender import Sender
 
 
 class ModuleMixin:
@@ -53,7 +54,6 @@ class ModuleMixin:
         pin = self.pin # get  pin
         self.setGPIO(pin,0) # set pin low
         self.updateGPIO(pin, False)
-
 
 
 class HVACcontroller(ModuleMixin):
@@ -123,6 +123,41 @@ class BTScontroller(ModuleMixin):
     @property
     def pin(self):
         return self.module.bts_pin
+
+class ModuleController(ModuleMixin):
+
+    def sendhello(self):
+        """
+        Method to check the transmission status for the site by requsting from the NMS http://nsm_server/checktxn
+
+        :return: {"TXN":"True"} or {"TXN":"False"}
+        """
+        endpoint = 'http://{0}/checktxn'.format(self.module.nms_server) # Cconstruct the endpoint to send to NMS server
+        sender = Sender() # create an http sender instance
+        response = sender.sendjson(endpoint) # send the request
+
+        return response
+
+    def checktransmission(self):
+        """
+        Method to request txn station
+
+        :return:
+        """
+        hello = self.sendhello()
+        if hello['TXN'] == 'False':
+            print('TXN is offline')
+            return False
+        elif hello['TXN'] == 'True':
+            print('TXN is online')
+            return True
+        else :
+            return False
+
+
+
+
+
 
 
 

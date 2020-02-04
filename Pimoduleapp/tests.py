@@ -78,6 +78,16 @@ class TestModuleController(TestCase):
         mod.save()
         self.modctl = ModuleController()
 
+    def testHello(self):
+        """
+        Test the send hello method
+
+        :return:
+        """
+        txn_status = self.modctl.sendhello()
+
+
+
 
 
 

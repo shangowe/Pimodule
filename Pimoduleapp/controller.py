@@ -2,8 +2,30 @@ from .models import Module
 from .httpsender import Sender
 
 
+def create_default_module():
+    """
+    Method to create a default module with default settings
+    :return:
+    """
+    default_nms_server = '192.168.1.1'
+    default_module_name = 'Default'
+
+    # create the module model
+    module = Module.objects.create(nms_server=default_nms_server, name=default_module_name)
+
+    return module
+
+
 class ModuleMixin:
-    module = Module.objects.get(id=1)
+
+    try:
+        # Try get a module for the object with ID = 1
+        module = Module.objects.get(id=1)
+    except Module.DoesNotExist:
+        # Handle exception of Module not exist
+        module = create_default_module()
+
+
 
     def getModule(self):
         return self.module
@@ -13,7 +35,7 @@ class ModuleMixin:
         Method to set the pin for Raspeberry pi hi or low, this module implements the GPIO library for raspberry pi
         :return:
         """
-        #TODO: add GPIO implemantion here
+        #TODO: add RPi.GPIO implemantion here
 
         print("setting pin ",status)
         pass
@@ -56,6 +78,9 @@ class ModuleMixin:
         self.updateGPIO(pin, False)
 
 
+
+
+
 class HVACcontroller(ModuleMixin):
     """
     HVAC class object
@@ -89,6 +114,7 @@ class HVACcontroller(ModuleMixin):
     @property
     def pin(self):
         return self.module.hvac_pin
+
 
 class BTScontroller(ModuleMixin):
     """
@@ -124,6 +150,7 @@ class BTScontroller(ModuleMixin):
     def pin(self):
         return self.module.bts_pin
 
+
 class ModuleController(ModuleMixin):
 
     def sendhello(self):
@@ -140,8 +167,8 @@ class ModuleController(ModuleMixin):
 
     def checktransmission(self):
         """
-        Method to request txn station
-
+        Method to request txn station and check status. This method should be called routinely to confirm transmission
+        status for the site.
         :return:
         """
         hello = self.sendhello()
@@ -153,6 +180,29 @@ class ModuleController(ModuleMixin):
             return True
         else :
             return False
+
+
+    def setname(self,name):
+        """
+        Method to set the name of the Module in the database
+
+        :return:
+        """
+        self.module.name = name
+        self.module.save(update_fields=['name'])
+
+
+    def setnms(self,ipaddress):
+        """
+        Configure the nms details for the module
+        :param name:
+        :return:
+        """
+        self.module.nms_server = ipaddress
+        self.module.save(update_fields=['nms_server'])
+
+
+
 
 
 

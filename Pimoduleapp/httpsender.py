@@ -22,3 +22,20 @@ class Sender(object):
         response = requests.post(endpoint, headers=headers)
 
         return response
+
+    def get(self,endpoint):
+        """
+        Send json HTTP request
+
+        :param endpoint:
+
+        :param data: Json
+
+        :return:
+        """
+        headers = {'Content-type': 'application/json',
+                   'Accept': 'text/plain'}  # create content type header for post request
+
+        response = requests.post(endpoint)
+
+        return response

@@ -12,8 +12,3 @@ class Module(models.Model):
     txnstatus = models.BooleanField(default=False) # transmission link status value
     hvac_pin = models.IntegerField(verbose_name='HVAC-PIN', null=True) # GPIO pin for raspberry pi connected to hvac relay
     bts_pin=models.IntegerField(verbose_name='BTS-PIN', null=True) # GPIO pin for raspberry pi connected to bts relay
-
-
-
-
-

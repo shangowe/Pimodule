@@ -30,6 +30,7 @@ class ModuleViewSet(viewsets.ModelViewSet):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
 
+
 class ModuleData(APIView,ModuleMixin):
     """
     List module details from the db
@@ -49,12 +50,13 @@ class ModuleData(APIView,ModuleMixin):
 
         return Response(data.data)
 
+
 class BTSOFF(APIView):
     """
     API view to switch of BTS
     """
 
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self,request,format=None):
         bts = BTScontroller()
         bts.off()
@@ -65,12 +67,13 @@ class BTSOFF(APIView):
 
 class BTSON(APIView):
     """
-    API view to switch of BTS
+    API view to switch on BTS
     """
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self,request,format=None):
         bts = BTScontroller()
         bts.on()
+        #TODO add logic to set seccess value in response
         response={"bts":"","success":""}
         response['bts'] = bts.status
         return Response(response)
@@ -80,7 +83,7 @@ class HVACOFF(APIView):
     """
     API view to switch of BTS
     """
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self,request,format=None):
 
         hvac = HVACcontroller()
@@ -94,13 +97,14 @@ class HVACON(APIView):
     """
     API view to switch of BTS
     """
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
     def get(self,request,format=None):
         hvac = HVACcontroller()
         hvac.on()
         response={"hvac-status":""}
         response['hvac-status'] = hvac.status
         return Response(response)
+
 
 class BTS(APIView):
     """
@@ -112,6 +116,7 @@ class BTS(APIView):
         response={"btsstatus":""}
         response['btsstatus'] = bts.status
         return Response(response)
+
 
 class HVAC(APIView):
     """

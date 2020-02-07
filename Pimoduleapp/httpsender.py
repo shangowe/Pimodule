@@ -6,7 +6,7 @@ class Sender(object):
     An http class to implement the sending of requests
     """
 
-    def sendjson(self,endpoint):
+    def sendjson(self,endpoint,data):
         """
         Send json HTTP request
 
@@ -19,7 +19,7 @@ class Sender(object):
         headers = {'Content-type': 'application/json',
                    'Accept': 'text/plain'}  # create content type header for post request
 
-        response = requests.post(endpoint, headers=headers)
+        response = requests.post(endpoint, headers=headers, data=json.dumps(data))
 
         return response
 

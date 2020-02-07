@@ -1,5 +1,7 @@
 from .models import Module
 from .httpsender import Sender
+import yaml, json
+import Pimodule.settings as setting
 
 
 def create_default_module():
@@ -11,7 +13,7 @@ def create_default_module():
     default_module_name = 'Default'
 
     # create the module model
-    module = Module.objects.create(nms_server=default_nms_server, name=default_module_name)
+    module = Module.objects.create(nms_server=default_nms_server, name=default_module_name,id=1)
 
     return module
 
@@ -22,6 +24,7 @@ class ModuleMixin:
         # Try get a module for the object with ID = 1
         module = Module.objects.get(id=1)
     except Module.DoesNotExist:
+
         # Handle exception of Module not exist
         module = create_default_module()
 
@@ -153,17 +156,37 @@ class BTScontroller(ModuleMixin):
 
 class ModuleController(ModuleMixin):
 
-    def sendhello(self):
+    def sendhello(self,*data):
         """
         Method to check the transmission status for the site by requsting from the NMS http://nsm_server/checktxn
 
         :return: {"TXN":"True"} or {"TXN":"False"}
         """
-        endpoint = 'http://{0}/checktxn'.format(self.module.nms_server) # Cconstruct the endpoint to send to NMS server
+        endpoint = 'http://{0}/hello/'.format(self.nms) # Construct the endpoint to send to NMS server
         sender = Sender() # create an http sender instance
-        response = sender.sendjson(endpoint) # send the request
+        if data:
+            response = sender.sendjson(endpoint, *data)  # send the request
+        else:
+            data = self.generatehellodata() # generate data from the db
+            response = sender.sendjson(endpoint, data)  # send the request
+
+
 
         return response
+
+
+    def generatehellodata(self):
+        """
+        Generates a dict for sending to the NMS as a hello
+
+        :return:
+        """
+        data ={}
+        data['BTS']=self.BTS
+        data['HVAC']=self.HVAC
+        data['module']=self.IP
+        data['name']=self.name
+        return data
 
     def checktransmission(self):
         """
@@ -171,14 +194,21 @@ class ModuleController(ModuleMixin):
         status for the site.
         :return:
         """
-        hello = self.sendhello()
-        if hello['TXN'] == 'False':
-            print('TXN is offline')
+        try:
+            reply = self.sendhello()
+            hello = reply.content.decode('utf-8') # decode the JSON respnse from NMS
+            hello = json.loads(hello)
+        except :
+            hello = {'ACK':'NOK'}
+
+        if hello['ACK'] == 'ER':
+            print('TXN is okay but an error occured on the server')
             return False
-        elif hello['TXN'] == 'True':
+        elif hello['ACK'] == 'OK':
             print('TXN is online')
             return True
         else :
+            print('TXN is offline')
             return False
 
 
@@ -188,8 +218,8 @@ class ModuleController(ModuleMixin):
 
         :return:
         """
-        self.module.name = name
-        self.module.save(update_fields=['name'])
+        self.getModule().name = name
+        self.getModule().save(update_fields=['name'])
 
 
     def setnms(self,ipaddress):
@@ -198,8 +228,92 @@ class ModuleController(ModuleMixin):
         :param name:
         :return:
         """
-        self.module.nms_server = ipaddress
-        self.module.save(update_fields=['nms_server'])
+        self.getModule().nms_server = ipaddress
+        self.getModule().save(update_fields=['nms_server'])
+
+    def setip(self,ip):
+        """
+        Configure the module ip address for the device
+
+        :param ip: IP address of the module
+        :return:
+        """
+        self.getModule().IP = ip
+        self.getModule().save(update_fields=['IP'])
+
+    @property
+    def BTS(self):
+        return self.getModule().btsstatus
+
+    @property
+    def HVAC(self):
+        return self.getModule().hvacstatus
+
+    @property
+    def IP(self):
+        return self.getModule().IP
+
+    @property
+    def name(self):
+        return self.getModule().name
+
+    @property
+    def nms(self):
+        return self.getModule().nms_server
+
+class ConfigManager(object):
+    """
+    A manger class for yaml configuations
+    """
+
+    config_file = setting.PIMODE_CONFIG # yaml cconfig file location
+
+    def __init__(self):
+        self.settings = self.data()
+
+    def data(self):
+        with open(self.config_file, 'r') as file :
+
+            settings = yaml.load(file,Loader=yaml.FullLoader) # read config YAML file
+        return settings
+
+    def save(self):
+        with open(self.config_file, 'w') as file :
+
+            yaml.dump(self.settings, file) # save config YAML file
+
+    def set_name(self, name):
+        self.settings['module']['name']=name
+        self.save()
+
+    def set_generator(self,gen):
+        self.settings['module']['generator'] = gen
+        self.save()
+
+    def set_battery(self,bat):
+        self.settings['module']['battery'] = bat
+        self.save()
+
+    @property
+    def name(self):
+
+        return self.settings['module']['name']
+
+    @property
+    def generator(self):
+        return self.settings['module']['generator']
+
+    @property
+    def battery(self):
+        return self.settings['module']['battery']
+
+    @property
+    def nms(self):
+        return self.settings['module']['nms']
+
+
+
+
 
 
 

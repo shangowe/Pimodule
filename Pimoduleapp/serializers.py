@@ -12,5 +12,6 @@ class SimpleSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     btsstatus = serializers.BooleanField()
     hvacstatus= serializers.BooleanField()
+    nms_server= serializers.CharField(max_length=200)
 
 

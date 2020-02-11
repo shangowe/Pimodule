@@ -21,7 +21,7 @@ class Command(BaseCommand):
         ip = options['if']
 
         ctl = ModuleController()
-        ctl.sendhello()
+        ctl.checktransmission()
 
 
 

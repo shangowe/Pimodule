@@ -9,14 +9,24 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
 
         parser.add_argument('name', nargs='+', type=int)
+        parser.add_argument('-s', '--status', type=str, help='Set Module interface ip address')
 
 
     def handle(self, *args, **options):
 
         pin = options['pin'][0]
+        status = options['status']
 
         bts = BTScontroller()
         bts.update_pin_db(pin)
+
+        if status == 'on':
+            bts.on()
+        elif status == 'off':
+            bts.off()
+        else :
+            pass
+
 
 
 

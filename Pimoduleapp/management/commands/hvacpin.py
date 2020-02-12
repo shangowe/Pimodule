@@ -9,14 +9,21 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
 
         parser.add_argument('name', nargs='+', type=int)
+        parser.add_argument('-s', '--status', type=str, help='Set Module interface ip address')
 
 
     def handle(self, *args, **options):
 
         pin = options['pin'][0]
+        status = options['status']
 
-        bts = HVACcontroller()
-        bts.update_pin_db(pin)
+        hvac = HVACcontroller()
+        hvac.update_pin_db(pin)
 
-
+        if status == 'on':
+            hvac.on()
+        elif status == 'off':
+            hvac.off()
+        else :
+            pass
 

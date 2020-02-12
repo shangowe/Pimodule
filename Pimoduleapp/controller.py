@@ -2,6 +2,7 @@ from .models import Module
 from .httpsender import Sender
 import yaml, json
 import Pimodule.settings as setting
+import RPi.GPIO as GPIO
 
 
 def create_default_module():
@@ -19,6 +20,11 @@ def create_default_module():
 
 
 class ModuleMixin:
+
+
+    # GPIO.BOARD -- Board numbering scheme. The pin numbers follow the pin numbers on header P1.
+    # GPIO.BCM -- Broadcom chip-specific pin numbers. These pin numbers follow the lower-level numbering system
+    GPIO.setmode(GPIO.BCM)
 
     try:
         # Try get a module for the object with ID = 1
@@ -40,6 +46,13 @@ class ModuleMixin:
         """
         #TODO: add RPi.GPIO implemantion here
 
+        if status:
+            # set pin to high
+            GPIO.output(pin, GPIO.HIGH)
+        else:
+            # set pin to LOW
+            GPIO.output(pin,GPIO.LOW)
+
         print("setting pin ",status)
         pass
 
@@ -53,6 +66,8 @@ class ModuleMixin:
 
         :return:
         """
+
+
 
         self.update_pin_db(pin) # set pin
         self.update_status_db(status) # set status
@@ -106,6 +121,9 @@ class HVACcontroller(ModuleMixin):
         :param pin:
         :return:
         """
+        # set the pin as an output for the pi
+        GPIO.setup(pin, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN)
+
         self.getModule().hvac_pin = pin
         self.getModule().save(update_fields=['hvac_pin'])
 
@@ -141,6 +159,9 @@ class BTScontroller(ModuleMixin):
         :param pin:
         :return:
         """
+        # set the pin as an output for the pi
+        GPIO.setup(pin, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN)
+
         self.getModule().bts_pin = pin
         self.getModule().save(update_fields=['bts_pin'])
 

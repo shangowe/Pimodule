@@ -145,7 +145,7 @@ class BTScontroller(ModuleMixin):
 
     def update_status_db(self, status):
         """
-        Method to update the status of the hvac in the module db
+        Method to update the status of the bts in the module db
 
         :return: None
         """

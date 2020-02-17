@@ -45,7 +45,7 @@ class ModuleMixin:
         :return:
         """
         #TODO: add RPi.GPIO implemantion here
-
+        GPIO.setup(pin, GPIO.OUT)
         if status:
             # set pin to high
             GPIO.output(pin, GPIO.HIGH)
@@ -122,7 +122,7 @@ class HVACcontroller(ModuleMixin):
         :return:
         """
         # set the pin as an output for the pi
-        GPIO.setup(pin, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(pin, GPIO.OUT)
 
         self.getModule().hvac_pin = pin
         self.getModule().save(update_fields=['hvac_pin'])
@@ -160,7 +160,7 @@ class BTScontroller(ModuleMixin):
         :return:
         """
         # set the pin as an output for the pi
-        GPIO.setup(pin, GPIO.OUT, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(pin, GPIO.OUT)
 
         self.getModule().bts_pin = pin
         self.getModule().save(update_fields=['bts_pin'])

@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
 
-        parser.add_argument('name', nargs='+', type=int)
+        parser.add_argument('pin', nargs='+', type=int)
         parser.add_argument('-s', '--status', type=str, help='Set Module interface ip address')
 
 

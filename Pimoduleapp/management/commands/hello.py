@@ -1,10 +1,23 @@
 from django.core.management.base import BaseCommand, CommandError
 from Pimoduleapp.models import Module
-from Pimoduleapp.controller import ModuleController
+from Pimoduleapp.controller import ModuleController, BTScontroller, HVACcontroller
+
+bts = BTScontroller()
+hvac = HVACcontroller()
+
+
+def turn_equipment_on():
+    bts.on()
+    hvac.on()
+
+def turn_equipment_off():
+    bts.off()
+    hvac.off()
 
 class Command(BaseCommand):
 
     help = 'send hello'
+
 
     def add_arguments(self, parser):
 
@@ -21,7 +34,65 @@ class Command(BaseCommand):
         ip = options['if']
 
         ctl = ModuleController()
-        ctl.checktransmission()
+        txn_state = ctl.checktransmission()
+
+        self.runchecks(txn_state) # run the routine check for transmission status
+
+
+
+    def runchecks(self,txn_is_ok):
+        ctl = ModuleController()
+
+
+        if txn_is_ok:
+
+            if 0 < ctl.TXN_OFF_COUNTER < 6 :
+                # reset the counter for transmission
+
+
+                if ctl.TXN_ON_COUNTER < 2:
+                    # check if the switch on delay is in overflow or not
+                    ctl.increament_txn_on_counter()
+
+                elif ctl.TXN_ON_COUNTER == 2:
+                    ctl.reset_txn_on_counter()
+                    ctl.reset_txn_off_counter()
+                    turn_equipment_on()
+
+            elif ctl.TXN_OFF_COUNTER == 6:
+                # the counter is in overflow
+
+                if ctl.TXN_ON_COUNTER < 2:
+                    # check if the switch on delay is in overflow or not
+                    ctl.increament_txn_on_counter()
+
+                elif ctl.TXN_ON_COUNTER == 2:
+                    # switch on the equipment and reset all counters
+                    ctl.reset_txn_on_counter()
+                    ctl.reset_txn_off_counter()
+                    turn_equipment_on()
+
+
+            else:
+                pass
+
+
+
+        else :
+
+            if 0 < ctl.TXN_OFF_COUNTER < 6 :
+                ctl.increament_txn_off_counter()
+                ctl.reset_txn_on_counter()
+
+            elif ctl.TXN_OFF_COUNTER == 6:
+                # keep the on counter in reset mode
+                ctl.reset_txn_on_counter()
+                turn_equipment_off()
+
+
+            else:
+                pass
+
 
 
 

@@ -2,7 +2,10 @@ from .models import Module
 from .httpsender import Sender
 import yaml, json
 import Pimodule.settings as setting
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
+
+# an import of the dummy GPIO library
+from .RPI import GPIO
 
 
 def create_default_module():
@@ -29,6 +32,7 @@ class ModuleMixin:
     try:
         # Try get a module for the object with ID = 1
         module = Module.objects.get(id=1)
+
     except Module.DoesNotExist:
 
         # Handle exception of Module not exist
@@ -262,6 +266,48 @@ class ModuleController(ModuleMixin):
         self.getModule().IP = ip
         self.getModule().save(update_fields=['IP'])
 
+    def increament_txn_off_counter(self):
+        """
+        Increments the counter for TXN off by one step
+
+        :return:
+        """
+        current_value = self.TXN_OFF_COUNTER
+        current_value = current_value+1
+
+        self.getModule().txn_offline_counter = current_value
+        self.getModule().save(update_fields=['txn_offline_counter'])
+
+    def increament_txn_on_counter(self):
+        """
+        Increments the counter for TXN on by one step
+
+        :return:
+        """
+        current_value = self.TXN_ON_COUNTER
+        current_value = current_value+1
+
+        self.getModule().txn_online_counter = current_value
+        self.getModule().save(update_fields=['txn_online_counter'])
+
+    def reset_txn_off_counter(self):
+        """
+        Method to rest the counter for txn offline status
+        :return:
+        """
+        self.getModule().txn_offline_counter = 0
+        self.getModule().save(update_fields=['txn_offline_counter'])
+
+    def reset_txn_on_counter(self):
+        """
+        Method to rest the counter for txn online status
+        :return:
+        """
+        self.getModule().txn_online_counter = 0
+        self.getModule().save(update_fields=['txn_online_counter'])
+
+
+
     @property
     def BTS(self):
         return self.getModule().btsstatus
@@ -281,6 +327,16 @@ class ModuleController(ModuleMixin):
     @property
     def nms(self):
         return self.getModule().nms_server
+
+    @property
+    def TXN_OFF_COUNTER(self):
+        return self.getModule().txn_offline_counter
+
+    @property
+    def TXN_ON_COUNTER(self):
+        return self.getModule().txn_online_counter
+
+
 
 class ConfigManager(object):
     """

@@ -2,6 +2,7 @@ from django.test import TestCase
 from .views import PMI
 from .models import Module
 from .controller import HVACcontroller, BTScontroller, ModuleController, ConfigManager
+from .management.commands import hello
 
 # Create your tests here.
 
@@ -97,6 +98,28 @@ class TestModuleController(TestCase):
         self.assertEqual(True,self.modctl.BTS)
         self.assertEqual(True,self.modctl.HVAC)
 
+    def testreset_txn_off_counter(self):
+
+        self.modctl.reset_txn_off_counter()
+        print(self.modctl.TXN_OFF_COUNTER)
+
+    def test_increament_txn_off_counter(self):
+
+        self.modctl.reset_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.assertEqual(2,self.modctl.TXN_OFF_COUNTER)
+        self.modctl.reset_txn_off_counter()
+        self.assertEqual(0, self.modctl.TXN_OFF_COUNTER)
+
+    def test_increament_txn_on_counter(self):
+
+        self.modctl.reset_txn_on_counter()
+        self.modctl.increament_txn_on_counter()
+        self.modctl.increament_txn_on_counter()
+        self.assertEqual(2,self.modctl.TXN_ON_COUNTER)
+        self.modctl.reset_txn_on_counter()
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
 
 class TestModuleHelloUpdates(TestCase):
     """
@@ -162,6 +185,137 @@ class TestConfigManager(TestCase):
         conf.set_generator('Y')
         newconf = ConfigManager()
         self.assertEqual('Y', newconf.generator)
+
+class TestCommands(TestCase):
+    """
+    Test the methods defined the commands module
+    """
+    def setUp(self):
+
+        mod = Module(name='MOD5',nms_server='192.168.10.10')
+        mod.save()
+        self.modctl = ModuleController()
+        self.modctl.reset_txn_off_counter()
+        self.modctl.reset_txn_on_counter()
+
+
+    def test_runchecks_with_overflow_txok(self):
+        """
+        Test the runchecks method from the  hello management commnad.
+
+        :return:
+        """
+        command = hello.Command()
+
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6, self.modctl.TXN_OFF_COUNTER)
+
+        i = 0
+        while i < 2:
+            command.runchecks(True)
+            i+=1
+
+        self.assertEqual(2, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+        command.runchecks(True)
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(0,self.modctl.TXN_OFF_COUNTER)
+
+    def test_runchecks_with_overflow_txnok(self):
+        """
+        Test the runchecks method from the  hello management commnad.
+
+        :return:
+        """
+        command = hello.Command()
+
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6, self.modctl.TXN_OFF_COUNTER)
+
+        i = 0
+        while i < 2:
+            command.runchecks(False)
+            i+=1
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+        command.runchecks(False)
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+
+
+    def test_runchecks_before_overflow_txok(self):
+        """
+        Test the runchecks method from the  hello management commnad.
+
+        :return:
+        """
+        command = hello.Command()
+
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(4, self.modctl.TXN_OFF_COUNTER)
+
+        i = 0
+        while i < 2:
+            command.runchecks(True)
+            i+=1
+
+        self.assertEqual(2, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(4,self.modctl.TXN_OFF_COUNTER)
+        command.runchecks(True)
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(0,self.modctl.TXN_OFF_COUNTER)
+
+    def test_runchecks_before_overflow_txnok(self):
+        """
+        Test the runchecks method from the  hello management commnad.
+
+        :return:
+        """
+        command = hello.Command()
+
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+        self.modctl.increament_txn_off_counter()
+
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(4, self.modctl.TXN_OFF_COUNTER)
+
+        i = 0
+        while i < 2:
+            command.runchecks(False)
+            i+=1
+
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+        command.runchecks(False)
+        self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
+        self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+
+
+
 
 
 

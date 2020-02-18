@@ -2,10 +2,10 @@ from .models import Module
 from .httpsender import Sender
 import yaml, json
 import Pimodule.settings as setting
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 # an import of the dummy GPIO library
-from .RPI import GPIO
+# from .RPI import GPIO
 
 
 def create_default_module():

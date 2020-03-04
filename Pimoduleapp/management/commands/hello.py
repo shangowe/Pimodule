@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from Pimoduleapp.models import Module
 from Pimoduleapp.controller import ModuleController, BTScontroller, HVACcontroller
+import logging
 
 bts = BTScontroller()
 hvac = HVACcontroller()
@@ -35,6 +36,7 @@ class Command(BaseCommand):
 
         ctl = ModuleController()
         txn_state = ctl.checktransmission()
+        logging.getLogger('hello').info('sending hello: {0}, transmission status is {1}'.format(ctl.name,txn_state))
 
         self.runchecks(txn_state) # run the routine check for transmission status
 

@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
         ctl = ModuleController()
         txn_state = ctl.checktransmission()
-        logging.getLogger('hello').info('sending hello: {0}, transmission status is {1}'.format(ctl.name,txn_state))
+        logging.getLogger('hello').info('sent hello: {0}, transmission status is {1}'.format(ctl.name,txn_state))
 
         self.runchecks(txn_state) # run the routine check for transmission status
 
@@ -47,6 +47,7 @@ class Command(BaseCommand):
 
 
         if txn_is_ok:
+            logging.getLogger('hello').info('sent hello: {0}, transmission status is {1}'.format(ctl.name, txn_is_ok))
 
             if 0 < ctl.TXN_OFF_COUNTER < 6 :
                 # reset the counter for transmission
@@ -55,8 +56,15 @@ class Command(BaseCommand):
                 if ctl.TXN_ON_COUNTER < 2:
                     # check if the switch on delay is in overflow or not
                     ctl.increament_txn_on_counter()
+                    logging.getLogger('hello').info(
+                        'TXN_OFF_COUNTER: {0}, TXN_ON_COUNTER : {1}, transmission status is {2}'.format(
+                            ctl.TXN_OFF_COUNTER,ctl.TXN_ON_COUNTER, txn_is_ok))
+
 
                 elif ctl.TXN_ON_COUNTER == 2:
+                    logging.getLogger('hello').info(
+                        ' SWITCHING-OFF @ TXN_OFF_COUNTER: {0}, TXN_ON_COUNTER : {1}, transmission status is {2}'.format(
+                            ctl.TXN_OFF_COUNTER,ctl.TXN_ON_COUNTER, txn_is_ok))
                     ctl.reset_txn_on_counter()
                     ctl.reset_txn_off_counter()
                     turn_equipment_on()
@@ -67,12 +75,18 @@ class Command(BaseCommand):
                 if ctl.TXN_ON_COUNTER < 2:
                     # check if the switch on delay is in overflow or not
                     ctl.increament_txn_on_counter()
+                    logging.getLogger('hello').info(
+                        ' DO nothing no overflow @ TXN_OFF_COUNTER: {0}, TXN_ON_COUNTER : {1}, transmission status is {2}'.format(
+                            ctl.TXN_OFF_COUNTER,ctl.TXN_ON_COUNTER, txn_is_ok))
 
                 elif ctl.TXN_ON_COUNTER == 2:
                     # switch on the equipment and reset all counters
                     ctl.reset_txn_on_counter()
                     ctl.reset_txn_off_counter()
                     turn_equipment_on()
+                    logging.getLogger('hello').info(
+                        ' SWITCHING-ON @ TXN_OFF_COUNTER: {0}, TXN_ON_COUNTER : {1}, transmission status is {2}'.format(
+                            ctl.TXN_OFF_COUNTER,ctl.TXN_ON_COUNTER, txn_is_ok))
 
 
             else:

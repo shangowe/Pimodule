@@ -10,9 +10,11 @@ class Module(models.Model):
     name = models.CharField(max_length=200)
     btsstatus = models.BooleanField(default=False)
     hvacstatus = models.BooleanField(default=False)
+    genstatus = models.BooleanField(default=False)
     txnstatus = models.BooleanField(default=False) # transmission link status value
     hvac_pin = models.IntegerField(verbose_name='HVAC-PIN', null=True) # GPIO pin for raspberry pi connected to hvac relay
     bts_pin=models.IntegerField(verbose_name='BTS-PIN', null=True) # GPIO pin for raspberry pi connected to bts relay
+    gen_pin=models.IntegerField(verbose_name='GEN-PIN', null=True) # GPIO pin for raspberry pi connected to bts relay
     txn_offline_counter = models.IntegerField(verbose_name='TXN-OFF-COUNTER', null=True,default=0) # Counter for offline status
     txn_online_counter = models.IntegerField(verbose_name='TXN-ON-COUNTER', null=True,default=0) # Counter for online status
 

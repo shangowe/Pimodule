@@ -1,0 +1,24 @@
+INFO 2020-03-04 14:59:19,760 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,761 hello 4673 139958462973696 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-04 14:59:19,761 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,761 hello 4673 139958462973696 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-04 14:59:19,761 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,762 hello 4673 139958462973696  SWITCHING-OFF @ TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-04 14:59:19,776 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,777 hello 4673 139958462973696  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-04 14:59:19,777 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,777 hello 4673 139958462973696  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-04 14:59:19,777 hello 4673 139958462973696 sent hello: Mod1, transmission status is True
+INFO 2020-03-04 14:59:19,780 hello 4673 139958462973696  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True
+INFO 2020-03-14 03:02:00,359 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,360 hello 4224 139639228454656 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-14 03:02:00,360 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,360 hello 4224 139639228454656 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-14 03:02:00,360 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,360 hello 4224 139639228454656  SWITCHING-OFF @ TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-14 03:02:00,377 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,378 hello 4224 139639228454656  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-14 03:02:00,378 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,378 hello 4224 139639228454656  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-14 03:02:00,378 hello 4224 139639228454656 sent hello: Mod1, transmission status is True
+INFO 2020-03-14 03:02:00,381 hello 4224 139639228454656  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True

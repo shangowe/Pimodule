@@ -2,10 +2,10 @@ from .models import Module
 from .httpsender import Sender
 import yaml, json
 import Pimodule.settings as setting
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 # an import of the dummy GPIO library
-# from .RPI import GPIO
+from .RPI import GPIO
 
 
 def create_default_module():
@@ -32,6 +32,7 @@ class ModuleMixin:
     try:
         # Try get a module for the object with ID = 1
         module = Module.objects.get(id=1)
+
 
     except Module.DoesNotExist:
 
@@ -178,6 +179,43 @@ class BTScontroller(ModuleMixin):
     def pin(self):
         return self.module.bts_pin
 
+class GENcontroller(ModuleMixin):
+    """
+    GEN class object
+    """
+    # mod = Module.objects.get(id=1)
+
+    def update_status_db(self, status):
+        """
+        Method to update the status of the bts in the module db
+
+        :return: None
+        """
+
+        self.getModule().genstatus = status
+        self.getModule().save(update_fields=['genstatus'])
+
+    def update_pin_db(self, pin):
+        """
+        Method to update the pin of the hvac in the module db
+        :param pin:
+        :return:
+        """
+        # set the pin as an output for the pin
+        GPIO.setup(pin, GPIO.OUT)
+
+        self.getModule().gen_pin = pin
+        self.getModule().save(update_fields=['gen_pin'])
+
+
+    @property
+    def status(self):
+        return self.module.genstatus
+
+    @property
+    def pin(self):
+        return self.module.gen_pin
+
 
 class ModuleController(ModuleMixin):
 
@@ -207,8 +245,9 @@ class ModuleController(ModuleMixin):
         :return:
         """
         data ={}
-        data['BTS']=self.BTS
-        data['HVAC']=self.HVAC
+        data['BTS']=self.BTS #BTS status
+        data['HVAC']=self.HVAC # HVAC status
+        data['GEN']=self.GEN # Generator status
         data['module']=self.IP
         data['name']=self.name
         return data
@@ -317,6 +356,10 @@ class ModuleController(ModuleMixin):
         return self.getModule().hvacstatus
 
     @property
+    def GEN(self):
+        return self.getModule().genstatus
+
+    @property
     def IP(self):
         return self.getModule().IP
 
@@ -364,11 +407,11 @@ class ConfigManager(object):
         self.save()
 
     def set_generator(self,gen):
-        self.settings['module']['generator'] = gen
+        self.settings['module']['generator']['set'] = gen
         self.save()
 
     def set_battery(self,bat):
-        self.settings['module']['battery'] = bat
+        self.settings['module']['battery']['set'] = bat
         self.save()
 
     @property

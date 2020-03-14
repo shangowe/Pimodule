@@ -1,6 +1,18 @@
 module:
-  battery: false
-  generator: Y
+  battery:
+    pin: 19
+    set: 0
+    status: 1
+  bts:
+    pin: 21
+    status: 1
+  generator:
+    pin: 18
+    set: Y
+    status: 1
+  hvac:
+    pin: 20
+    status: 1
+  ip: null
   name: Mega
-  nms: 127.0.0.1:8080
-  ip:
+  nms: 192.168.1.2:8080

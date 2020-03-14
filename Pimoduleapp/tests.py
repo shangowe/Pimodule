@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .views import PMI
 from .models import Module
-from .controller import HVACcontroller, BTScontroller, ModuleController, ConfigManager
+from .controller import HVACcontroller, BTScontroller, GENcontroller, ModuleController, ConfigManager
 from .management.commands import hello
 
 # Create your tests here.
@@ -70,6 +70,29 @@ class TestBTScontroler(TestCase):
         self.bts.update_pin_db(3)
         self.bts.on()
         self.bts.off()
+
+class TestGENcontroler(TestCase):
+    """
+    Test the GENcontroller implementation
+    """
+    def setUp(self):
+        mod = Module(name='MOD5',nms_server='192.168.10.10')
+        mod.save()
+        self.gen = GENcontroller()
+
+    def testHVACStatus(self):
+        self.gen.update_status_db(False)
+        self.assertEqual(False,self.gen.status)
+
+    def testsetGPIO(self):
+        self.gen.updateGPIO(1, False) # set pin for bts and status
+        self.assertEqual(False,self.gen.status)
+        self.assertEqual(1,self.gen.pin)
+
+    def testOn(self):
+        self.gen.update_pin_db(3)
+        self.gen.on()
+        self.gen.off()
 
 class TestModuleController(TestCase):
     """
@@ -173,7 +196,7 @@ class TestConfigManager(TestCase):
 
         conf.set_generator('Y')
         newconf = ConfigManager()
-        self.assertEqual('Y', newconf.generator)
+        self.assertEqual({'set': 'Y', 'pin': 18, 'status': 1}, newconf.generator)
 
         conf2 = ConfigManager()
         conf2.set_generator(False)

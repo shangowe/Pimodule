@@ -19,7 +19,7 @@ class TestPMI(TestCase):
         self.assertEqual('MOD5',mod.name)
 
 
-class TestHVACcontroler(TestCase):
+class TestHVACcontroller(TestCase):
     """
     Test the HVACcontroller implementation
     """
@@ -48,7 +48,7 @@ class TestHVACcontroler(TestCase):
         self.hvac.on()
         self.hvac.off()
 
-class TestBTScontroler(TestCase):
+class TestBTScontroller(TestCase):
     """
     Test the BTScontroller implementation
     """
@@ -71,7 +71,7 @@ class TestBTScontroler(TestCase):
         self.bts.on()
         self.bts.off()
 
-class TestGENcontroler(TestCase):
+class TestGENcontroller(TestCase):
     """
     Test the GENcontroller implementation
     """
@@ -116,10 +116,13 @@ class TestModuleController(TestCase):
     def testBTSproperty(self):
         self.bts = BTScontroller()
         self.hvac = HVACcontroller()
+        self.gen = GENcontroller()
         self.bts.update_status_db(True)
         self.hvac.update_status_db(True)
+        self.gen.update_status_db(False)
         self.assertEqual(True,self.modctl.BTS)
         self.assertEqual(True,self.modctl.HVAC)
+        self.assertEqual(False,self.modctl.GEN)
 
     def testreset_txn_off_counter(self):
 

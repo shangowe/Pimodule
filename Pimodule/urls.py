@@ -34,4 +34,7 @@ urlpatterns = [
     path('hvac/',views.HVAC.as_view()), # endpoint to  get status of HVAC
     path('hvacoff/',views.HVACOFF.as_view()), # endpoint to  switch hvac off
     path('hvacon/',views.HVACON.as_view()), # endpoint to set hvac on
+    path('gen/',views.GEN.as_view()), # endpoint to  get status of GEN
+    path('genoff/',views.GENOFF.as_view()), # endpoint to  switch gen off
+    path('genon/',views.GENON.as_view()), # endpoint to set gen on
 ]

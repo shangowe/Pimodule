@@ -73,7 +73,7 @@ class BTSON(APIView):
     def get(self,request,format=None):
         bts = BTScontroller()
         bts.on()
-        #TODO add logic to set seccess value in response
+        #TODO add logic to set success value in response
         response={"bts":"","success":""}
         response['bts'] = bts.status
         return Response(response)
@@ -105,6 +105,31 @@ class HVACON(APIView):
         response['hvac-status'] = hvac.status
         return Response(response)
 
+class GENOFF(APIView):
+    """
+    API view to switch off GEN
+    """
+    # permission_classes = [permissions.IsAuthenticated]
+    def get(self,request,format=None):
+
+        gen = GENcontroller()
+        gen.off()
+        response = {"gen-status": ""}
+        response['gen-status'] = gen.status
+        return Response(response)
+
+class GENON(APIView):
+    """
+    API view to switch on Generator
+    """
+    # permission_classes = [permissions.IsAuthenticated]
+    def get(self,request,format=None):
+        gen = GENcontroller()
+        gen.on()
+        response={"gen-status":""}
+        response['gen-status'] = gen.status
+        return Response(response)
+
 
 class BTS(APIView):
     """
@@ -127,6 +152,17 @@ class HVAC(APIView):
 
         hvac = HVACcontroller()
         response={"hvacstatus":hvac.status}
+        return Response(response)
+
+class GEN(APIView):
+    """
+    To return the current status of the GEN switch
+    """
+
+    def get(self,request):
+
+        gen = GENcontroller()
+        response={"genstatus":gen.status}
         return Response(response)
 
 

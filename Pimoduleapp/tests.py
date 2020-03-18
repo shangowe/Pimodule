@@ -1,8 +1,12 @@
 from django.test import TestCase
+from django.urls import reverse
 from .views import PMI
 from .models import Module
-from .controller import HVACcontroller, BTScontroller, GENcontroller, ModuleController, ConfigManager
+from .controller import HVACcontroller, BTScontroller, GENcontroller, ModuleController, ConfigManager, MAINScontroller
 from .management.commands import hello
+
+from rest_framework.test import APITestCase
+
 
 # Create your tests here.
 
@@ -93,6 +97,24 @@ class TestGENcontroller(TestCase):
         self.gen.update_pin_db(3)
         self.gen.on()
         self.gen.off()
+class TestMAINScontroller(TestCase):
+    """
+    Test the Mainscontroller implementation
+    """
+    def setUp(self):
+        mod = Module(name='MOD5',nms_server='192.168.10.10')
+        mod.save()
+        self.mains = MAINScontroller()
+
+    def testMAINSStatus(self):
+        self.mains.update_status_db(False)
+        self.assertEqual(False,self.mains.status)
+
+    def testcheckstatus(self):
+        self.mains.check_state()
+        self.assertEqual(True, self.mains.status)
+
+
 
 class TestModuleController(TestCase):
     """
@@ -339,6 +361,40 @@ class TestCommands(TestCase):
         command.runchecks(False)
         self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
         self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+
+class TestAPI(APITestCase):
+
+    def setUp(self):
+        mod = Module(name='MOD5',nms_server='192.168.10.10')
+        mod.save()
+        self.modctl = ModuleController()
+
+    def test_get_all(self):
+
+        response = self.client.get('/getall/')
+        data = {'nms_server': '192.168.10.10', 'hvacstatus': False, 'btsstatus': False, 'mainsstatus': False,
+                'name': 'MOD5', 'genstatus': False, 'txnstatus': False}
+
+        self.assertEqual(response.data, data)
+
+
+    def testMAINSStatus(self):
+        self.mains = MAINScontroller()
+        self.mains.update_status_db(False)
+        self.assertEqual(False,self.mains.status)
+
+        self.mains.check_state()
+
+        response = self.client.get('/getall/')
+        data = {'nms_server': '192.168.10.10', 'hvacstatus': False, 'btsstatus': False, 'mainsstatus': True,
+                'name': 'MOD5', 'genstatus': False, 'txnstatus': False}
+
+        self.assertEqual(response.data, data)
+
+
+
+
+
 
 
 

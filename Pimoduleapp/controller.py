@@ -34,6 +34,7 @@ class ModuleMixin:
         module = Module.objects.get(id=1)
 
 
+
     except Module.DoesNotExist:
 
         # Handle exception of Module not exist
@@ -100,8 +101,14 @@ class ModuleMixin:
         self.setGPIO(pin,0) # set pin low
         self.updateGPIO(pin, False)
 
-
-
+    def readGPIO(self, pin):
+        """
+        Reads the input status of a pin
+        :param pin: pin index
+        :return: True or false
+        """
+        GPIO.setup(pin, GPIO.OUT)
+        return GPIO.input(pin)
 
 
 class HVACcontroller(ModuleMixin):
@@ -216,6 +223,89 @@ class GENcontroller(ModuleMixin):
     def pin(self):
         return self.module.gen_pin
 
+class MAINScontroller(ModuleMixin):
+    """
+    MAINS class object
+    """
+
+
+    def update_status_db(self, status):
+        """
+        Method to update the status of the bts in the module db
+
+        :return: None
+        """
+
+        self.getModule().mainsstatus = status
+        self.getModule().save(update_fields=['mainsstatus'])
+
+    def update_pin_db(self, pin):
+        """
+        Method to update the pin of the mains in the module db
+        :param pin:
+        :return:
+        """
+        # set the pin as an output for the pin
+        GPIO.setup(pin, GPIO.IN)
+
+        self.getModule().mains_pin = pin
+        self.getModule().save(update_fields=['mains_pin'])
+
+    def check_state(self):
+        """
+        get input status of the mains switch, this method is routinely called by the system to check the status of the
+        mains supply
+        :return: True or False
+        """
+        state = self.readGPIO(self.pin)
+        self.update_status_db(state) # update the database
+
+
+    @property
+    def status(self):
+        return self.module.mainsstatus
+
+    @property
+    def pin(self):
+        return self.module.mains_pin
+
+class BATTcontroller(ModuleMixin):
+    """
+    Battery class object
+    """
+    # mod = Module.objects.get(id=1)
+
+    def update_status_db(self, status):
+        """
+        Method to update the status of the bts in the module db
+
+        :return: None
+        """
+
+        self.getModule().genstatus = status
+        self.getModule().save(update_fields=['genstatus'])
+
+    def update_pin_db(self, pin):
+        """
+        Method to update the pin of the hvac in the module db
+        :param pin:
+        :return:
+        """
+        # set the pin as an output for the pin
+        GPIO.setup(pin, GPIO.OUT)
+
+        self.getModule().gen_pin = pin
+        self.getModule().save(update_fields=['gen_pin'])
+
+
+    @property
+    def status(self):
+        return self.module.genstatus
+
+    @property
+    def pin(self):
+        return self.module.gen_pin
+
 
 class ModuleController(ModuleMixin):
 
@@ -250,6 +340,7 @@ class ModuleController(ModuleMixin):
         data['GEN']=self.GEN # Generator status
         data['module']=self.IP
         data['name']=self.name
+        data['MAINS']=self.MAINS
         return data
 
     def checktransmission(self):
@@ -358,6 +449,10 @@ class ModuleController(ModuleMixin):
     @property
     def GEN(self):
         return self.getModule().genstatus
+
+    @property
+    def MAINS(self):
+        return self.getModule().mainsstatus
 
     @property
     def IP(self):

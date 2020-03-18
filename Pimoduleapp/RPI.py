@@ -4,6 +4,7 @@ class GPIO:
     OUT = ''
     HIGH=''
     LOW=''
+    IN=''
     def setmode(self):
         pass
 
@@ -12,3 +13,6 @@ class GPIO:
 
     def output(self,pin):
         pass
+
+    def input(pin):
+        return True

@@ -15,5 +15,6 @@ class SimpleSerializer(serializers.Serializer):
     genstatus= serializers.BooleanField()
     txnstatus= serializers.BooleanField()
     nms_server= serializers.CharField(max_length=200)
+    mainsstatus=serializers.BooleanField()
 
 

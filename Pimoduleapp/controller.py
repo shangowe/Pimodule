@@ -308,14 +308,17 @@ class BATTcontroller(ModuleMixin):
 
 
 class ModuleController(ModuleMixin):
+    
+    UPDATE = 'update'
+    HELLO = 'hello'
 
-    def sendhello(self,*data):
+    def sendmsg(self, type, *data):
         """
         Method to check the transmission status for the site by requsting from the NMS http://nsm_server/checktxn
 
         :return: {"TXN":"True"} or {"TXN":"False"}
         """
-        endpoint = 'http://{0}/hello/'.format(self.nms) # Construct the endpoint to send to NMS server
+        endpoint = 'http://{0}/{1}/'.format(self.nms,type) # Construct the endpoint to send to NMS server
         sender = Sender() # create an http sender instance
         if data:
             response = sender.sendjson(endpoint, *data)  # send the request
@@ -350,7 +353,7 @@ class ModuleController(ModuleMixin):
         :return:
         """
         try:
-            reply = self.sendhello()
+            reply = self.sendmsg(self.UPDATE)
             hello = reply.content.decode('utf-8') # decode the JSON respnse from NMS
             hello = json.loads(hello)
         except :

@@ -178,12 +178,12 @@ class TestModuleHelloUpdates(TestCase):
 
     def testsendHello_withdata(self):
         data = {'module': '192.168.1.1', 'BTS': 'True', 'HVAC': True, 'name':'Himal'}
-        reply = self.modctl.sendhello(data)
+        reply = self.modctl.sendmsg(self.modctl.HELLO,data)
         reply = reply.content.decode('utf-8')
         print(reply)
 
     def testdefaultHello(self):
-        reply = self.modctl.sendhello()
+        reply = self.modctl.sendmsg(self.modctl.HELLO)
         reply = reply.content.decode('utf-8')
         print(reply)
 

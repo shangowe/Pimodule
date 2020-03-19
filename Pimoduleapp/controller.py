@@ -353,7 +353,7 @@ class ModuleController(ModuleMixin):
         :return:
         """
         try:
-            reply = self.sendmsg(self.UPDATE)
+            reply = self.sendmsg(self.HELLO)
             hello = reply.content.decode('utf-8') # decode the JSON respnse from NMS
             hello = json.loads(hello)
         except :

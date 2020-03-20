@@ -66,3 +66,39 @@ INFO 2020-03-20 12:39:51,914 hello 30581 139718915364608 sent hello: Phillip, tr
 INFO 2020-03-20 12:39:51,915 hello 30581 139718915364608  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
 INFO 2020-03-20 12:39:51,916 hello 30581 139718915364608 sent hello: Phillip, transmission status is True
 INFO 2020-03-20 12:39:51,918 hello 30581 139718915364608  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True
+INFO 2020-03-20 13:15:33,313 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,314 hello 32668 140510797874944 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:15:33,314 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,314 hello 32668 140510797874944 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:15:33,314 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,314 hello 32668 140510797874944  SWITCHING-OFF @ TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:15:33,329 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,329 hello 32668 140510797874944  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:15:33,329 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,330 hello 32668 140510797874944  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:15:33,330 hello 32668 140510797874944 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:15:33,332 hello 32668 140510797874944  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True
+INFO 2020-03-20 13:16:03,798 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,798 hello 32732 139703871088384 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:16:03,798 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,799 hello 32732 139703871088384 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:16:03,799 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,799 hello 32732 139703871088384  SWITCHING-OFF @ TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:16:03,814 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,814 hello 32732 139703871088384  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:16:03,814 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,815 hello 32732 139703871088384  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:16:03,815 hello 32732 139703871088384 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:16:03,817 hello 32732 139703871088384  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True
+INFO 2020-03-20 13:17:43,348 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,348 hello 328 140570862565120 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:17:43,348 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,349 hello 328 140570862565120 TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:17:43,349 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,349 hello 328 140570862565120  SWITCHING-OFF @ TXN_OFF_COUNTER: 4, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:17:43,363 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,364 hello 328 140570862565120  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 1, transmission status is True
+INFO 2020-03-20 13:17:43,364 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,364 hello 328 140570862565120  DO nothing no overflow @ TXN_OFF_COUNTER: 6, TXN_ON_COUNTER : 2, transmission status is True
+INFO 2020-03-20 13:17:43,364 hello 328 140570862565120 sent hello: Phillip, transmission status is True
+INFO 2020-03-20 13:17:43,367 hello 328 140570862565120  SWITCHING-ON @ TXN_OFF_COUNTER: 0, TXN_ON_COUNTER : 0, transmission status is True

@@ -177,15 +177,18 @@ class TestModuleHelloUpdates(TestCase):
         self.modctl = ModuleController()
 
     def testsendHello_withdata(self):
-        data = {'module': '192.168.1.1', 'BTS': 'True', 'HVAC': True, 'name':'Himal'}
+        data = {'module': '192.168.1.1:8080', 'BTS': 'True', 'HVAC': True, 'name':'Himal'}
         reply = self.modctl.sendmsg(self.modctl.HELLO,data)
         reply = reply.content.decode('utf-8')
-        print(reply)
+        expected_reply = {'ACK': 'OK', 'BTS': True, 'GEN': None, 'HVAC': True, 'MAINS': None}
+        self.assertJSONEqual(reply,expected_reply)
+
 
     def testdefaultHello(self):
         reply = self.modctl.sendmsg(self.modctl.HELLO)
         reply = reply.content.decode('utf-8')
-        print(reply)
+        expected_reply = {"BTS": None, "ACK": "ER", "HVAC": None}
+        self.assertJSONEqual(reply,expected_reply)
 
     def testchecktransmission(self):
         self.modctl.checktransmission() # test transmission
@@ -194,20 +197,28 @@ class TestConfigManager(TestCase):
 
     def testdata(self):
         config = ConfigManager()
-        data = config.data()
-        print(data)
+        data = config.data
+        expected_data = {'module': dict(ip=None, name='Mega', generator={'status': 0, 'pin': 18, 'set': 'Y'},
+                                        bts={'status': 1, 'pin': 21}, battery={'status': 1, 'pin': 19, 'set': 0},
+                                        nms='192.168.1.2:8080', mains={'status': 0, 'pin': 17},
+                                        hvac={'status': 1, 'pin': 20})}
+
+        self.assertDictEqual(data, expected_data)
 
     def testname(self):
         config = ConfigManager()
-        print('name: ',config.name)
+        self.assertEqual('Mega',config.name)
+
 
     def testgenerator(self):
         config = ConfigManager()
-        print('generator: ',config.generator)
+        expected_dict = {'status': 0, 'pin': 18, 'set': 'Y'}
+        self.assertDictEqual(expected_dict, config.generator)
 
     def testbattery(self):
         config = ConfigManager()
-        print('battery: ',config.battery)
+        expected_dict =  {'pin': 19, 'status': 1, 'set': 0}
+        self.assertDictEqual(expected_dict, config.battery)
 
     def testsetname(self):
         conf = ConfigManager()
@@ -221,18 +232,21 @@ class TestConfigManager(TestCase):
 
         conf.set_generator('Y')
         newconf = ConfigManager()
-        self.assertEqual({'set': 'Y', 'pin': 18, 'status': 1}, newconf.generator)
+        expected_dict = dict(set='Y', pin=18, status=0)
+        self.assertEqual(expected_dict, newconf.generator)
 
         conf2 = ConfigManager()
         conf2.set_generator(False)
         newconf2 = ConfigManager()
-        self.assertEqual(False, newconf2.generator)
+        expected_dict = dict(set=False, pin=18, status=0)
+        self.assertDictEqual(expected_dict, newconf2.generator)
 
         conf = ConfigManager()
 
         conf.set_generator('Y')
         newconf = ConfigManager()
-        self.assertEqual('Y', newconf.generator)
+        expected_dict = dict(set='Y', pin=18, status=0)
+        self.assertEqual(expected_dict, newconf.generator)
 
 class TestCommands(TestCase):
     """

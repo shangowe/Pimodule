@@ -491,8 +491,9 @@ class ConfigManager(object):
     config_file = setting.PIMODE_CONFIG # yaml cconfig file location
 
     def __init__(self):
-        self.settings = self.data()
+        self.settings = self.data
 
+    @property
     def data(self):
         with open(self.config_file, 'r') as file :
 

@@ -297,6 +297,7 @@ class TestCommands(TestCase):
         :return:
         """
         command = hello.Command()
+        module = self.modctl.getModule()
 
         self.modctl.increament_txn_off_counter()
         self.modctl.increament_txn_off_counter()
@@ -318,6 +319,8 @@ class TestCommands(TestCase):
         command.runchecks(False)
         self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
         self.assertEqual(6,self.modctl.TXN_OFF_COUNTER)
+        self.assertEqual(False,module.btsstatus)
+        self.assertEqual(False,module.hvacstatus)
 
 
     def test_runchecks_before_overflow_txok(self):
@@ -327,6 +330,7 @@ class TestCommands(TestCase):
         :return:
         """
         command = hello.Command()
+        module = self.modctl.getModule()
 
         self.modctl.increament_txn_off_counter()
         self.modctl.increament_txn_off_counter()
@@ -347,6 +351,8 @@ class TestCommands(TestCase):
         command.runchecks(True)
         self.assertEqual(0, self.modctl.TXN_ON_COUNTER)
         self.assertEqual(0,self.modctl.TXN_OFF_COUNTER)
+        self.assertEqual(True,module.btsstatus)
+        self.assertEqual(True,module.hvacstatus)
 
     def test_runchecks_before_overflow_txnok(self):
         """

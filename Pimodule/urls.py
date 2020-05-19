@@ -27,6 +27,7 @@ router.register(r'module', views.ModuleViewSet)
 
 urlpatterns = [
     path('',include(router.urls)),
+    path('',include('Pimoduleapp.urls')),
     path('getall/',views.ModuleData.as_view()),
     path('bts/',views.BTS.as_view()), # endpoint to get status of bts
     path('btsoff/',views.BTSOFF.as_view()), # endpoint to switch off bts
@@ -37,5 +38,5 @@ urlpatterns = [
     path('gen/',views.GEN.as_view()), # endpoint to  get status of GEN
     path('genoff/',views.GENOFF.as_view()), # endpoint to  switch gen off
     path('genon/',views.GENON.as_view()), # endpoint to set gen on
-    path('setup/<str:pk>',views.SetupView.as_view()) #endpoint to setup the device attributes
+
 ]

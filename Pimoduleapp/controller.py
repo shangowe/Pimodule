@@ -403,6 +403,23 @@ class ModuleController(ModuleMixin):
         self.getModule().IP = ip
         self.getModule().save(update_fields=['IP'])
 
+    def configure_bts_pin(self,pin):
+        """
+        Configures the pin of the BTS on the module
+        :param pin:
+        :return:
+        """
+        bts_ctl = BTScontroller() # create a BTS controller instance
+        bts_ctl.update_pin_db(pin) # set the pin
+    def configure_hvac_pin(self,pin):
+        """
+        Configures the pin of the BTS on the module
+        :param pin:
+        :return:
+        """
+        hvac_ctl = HVACcontroller() # create a BTS controller instance
+        hvac_ctl.update_pin_db(pin) # set the pin
+
     def increament_txn_off_counter(self):
         """
         Increments the counter for TXN off by one step
@@ -480,6 +497,14 @@ class ModuleController(ModuleMixin):
     @property
     def TXN_ON_COUNTER(self):
         return self.getModule().txn_online_counter
+
+    @property
+    def btspin(self):
+        return self.getModule().bts_pin
+
+    @property
+    def hvacpin(self):
+        return self.getModule().hvac_pin
 
 
 

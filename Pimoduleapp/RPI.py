@@ -15,4 +15,8 @@ class GPIO:
         pass
 
     def input(pin):
-        return True
+        """
+        Should return a false for all non raspberry pi pins
+        :return: False
+        """
+        return False

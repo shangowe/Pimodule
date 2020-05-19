@@ -7,6 +7,8 @@ from .management.commands import hello
 
 from rest_framework.test import APITestCase
 
+import Pimodule.settings as settings # import the settings of the Pimodule.
+
 
 # Create your tests here.
 
@@ -61,7 +63,7 @@ class TestBTScontroller(TestCase):
         mod.save()
         self.bts = BTScontroller()
 
-    def testHVACStatus(self):
+    def testBTSStatus(self):
         self.bts.update_status_db(False)
         self.assertEqual(False,self.bts.status)
 
@@ -145,6 +147,18 @@ class TestModuleController(TestCase):
         self.assertEqual(True,self.modctl.BTS)
         self.assertEqual(True,self.modctl.HVAC)
         self.assertEqual(False,self.modctl.GEN)
+
+    def testBTSPinConfiguration(self):
+
+        self.modctl.configure_bts_pin(11) # assign the bts pin of the module
+
+        self.assertEqual(self.modctl.btspin,11)
+
+    def testHVACPinConfiguration(self):
+
+        self.modctl.configure_hvac_pin(11) # assign the hvac pin of the module
+
+        self.assertEqual(self.modctl.hvacpin,11)
 
     def testreset_txn_off_counter(self):
 
@@ -259,6 +273,13 @@ class TestCommands(TestCase):
         self.modctl = ModuleController()
         self.modctl.reset_txn_off_counter()
         self.modctl.reset_txn_on_counter()
+
+        # if running on Pi need to set up actuall ins for bts and hvac or else GPIO exceptions are raised
+        if settings.RASPI == True:
+            self.modctl.configure_bts_pin(11)
+            self.modctl.configure_hvac_pin(12)
+
+
 
 
     def test_runchecks_with_overflow_txok(self):
@@ -401,16 +422,23 @@ class TestAPI(APITestCase):
     def testMAINSStatus(self):
         self.mains = MAINScontroller()
         self.mains.update_status_db(False)
-        self.mains.update_pin_db(10)
         self.assertEqual(False,self.mains.status)
 
-        self.mains.check_state()
-
-        response = self.client.get('/getall/')
-        data = {'nms_server': '192.168.10.10', 'hvacstatus': False, 'btsstatus': False, 'mainsstatus': True,
+        # check if running on raspberry pi or on test environment
+        if settings.RASPI == True:
+            self.mains.update_pin_db(10)
+            self.data = {'nms_server': '192.168.10.10', 'hvacstatus': False, 'btsstatus': False, 'mainsstatus': True,
+                'name': 'MOD5', 'genstatus': False, 'txnstatus': False}
+        else:
+            self.data = {'nms_server': '192.168.10.10', 'hvacstatus': False, 'btsstatus': False, 'mainsstatus': False,
                 'name': 'MOD5', 'genstatus': False, 'txnstatus': False}
 
-        self.assertEqual(response.data, data)
+        self.mains.check_state()
+        response = self.client.get('/getall/')
+        print(response.data)
+        print(self.data)
+        self.assertEqual(response.data, self.data)
+
 
 
 

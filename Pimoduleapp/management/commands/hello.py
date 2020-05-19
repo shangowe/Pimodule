@@ -103,7 +103,7 @@ class Command(BaseCommand):
             if 0 < ctl.TXN_OFF_COUNTER < 6 :
                 ctl.increament_txn_off_counter()
                 ctl.reset_txn_on_counter()
-                self.logger.info('RESET ON-COUNTER, TXN_OFF_COUNTER:{0}, TXN_ON_COUNTER:{1}, TXN_STATUS: {3} '.format(
+                self.logger.info('RESET ON-COUNTER, TXN_OFF_COUNTER:{0}, TXN_ON_COUNTER:{1}, TXN_STATUS: {2} '.format(
                     ctl.TXN_OFF_COUNTER,ctl.TXN_ON_COUNTER, txn_is_ok))
 
             elif ctl.TXN_OFF_COUNTER == 6:

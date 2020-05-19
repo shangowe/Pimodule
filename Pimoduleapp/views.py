@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import TemplateView
 from .serializers import ModuleSerializer
 from rest_framework import viewsets
 from django.http import Http404
@@ -49,6 +50,21 @@ class ModuleData(APIView,ModuleMixin):
         # serializer_class = ModuleSerializer
 
         return Response(data.data)
+
+class SetupView(TemplateView):
+    """
+    Generic view to configure the module via a web interface
+    """
+    template_name = 'Powermoduleapp/setup.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super(SetupView,self).get_context_data(**kwargs)
+        power_module = PMI() # create power module instance from db
+        module_entry = power_module.mod
+        context['module'] = module_entry
+        return context
+
 
 
 class BTSOFF(APIView):

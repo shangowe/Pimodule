@@ -5,4 +5,4 @@ class ModuleForm(forms.ModelForm):
 
     class Meta:
         model = Module
-        fields =('nms_server','name','hvac_pin','bts_pin','mains_pin','gen_pin')
+        fields =('nms_server','IP','name','hvac_pin','bts_pin','mains_pin','gen_pin')

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import UpdateView
 from .serializers import ModuleSerializer
 from rest_framework import viewsets
 from django.http import Http404
@@ -10,6 +10,7 @@ from .models import Module
 from .serializers import ModuleSerializer, SimpleSerializer
 from .controller import *
 from rest_framework import permissions
+from .forms import ModuleForm
 
 
 # Create your views here.
@@ -51,20 +52,13 @@ class ModuleData(APIView,ModuleMixin):
 
         return Response(data.data)
 
-class SetupView(TemplateView):
+class SetupView(UpdateView):
     """
     Generic view to configure the module via a web interface
     """
+    model = Module
+    form_class = ModuleForm
     template_name = 'Powermoduleapp/setup.html'
-
-
-    def get_context_data(self, **kwargs):
-        context = super(SetupView,self).get_context_data(**kwargs)
-        power_module = PMI() # create power module instance from db
-        module_entry = power_module.mod
-        context['module'] = module_entry
-        return context
-
 
 
 class BTSOFF(APIView):

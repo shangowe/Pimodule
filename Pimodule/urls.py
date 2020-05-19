@@ -37,5 +37,5 @@ urlpatterns = [
     path('gen/',views.GEN.as_view()), # endpoint to  get status of GEN
     path('genoff/',views.GENOFF.as_view()), # endpoint to  switch gen off
     path('genon/',views.GENON.as_view()), # endpoint to set gen on
-    path('setup/',views.SetupView.as_view()) #endpoint to setup the device attributes
+    path('setup/<str:pk>',views.SetupView.as_view()) #endpoint to setup the device attributes
 ]

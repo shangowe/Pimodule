@@ -401,6 +401,7 @@ class TestAPI(APITestCase):
     def testMAINSStatus(self):
         self.mains = MAINScontroller()
         self.mains.update_status_db(False)
+        self.mains.update_pin_db(10)
         self.assertEqual(False,self.mains.status)
 
         self.mains.check_state()
